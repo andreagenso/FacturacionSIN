@@ -4,7 +4,7 @@ import scala.Array
 
 class Verhoeff {
 
-  def obtenerVerhoeff(cifra: String): String = {
+  def obtenerVerhoeff(cifra: String): Int = {
 
     // matriz de multiplicaciones
     val mul: Array[Array[Int]] = Array[Array[Int]] (Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
@@ -28,20 +28,20 @@ class Verhoeff {
       Array(2, 7, 9, 3, 8, 0, 6, 4, 1, 5),
       Array(7, 0, 4, 6, 9, 1, 3, 2, 5, 8))
 
-    //
     val inv: Array[Int] = Array(0, 4, 3, 2, 1, 5, 6, 7, 8, 9)
-    val numeroInvertido = invierteNumero(cifra)
+    val numeroInvertido: Array[Int] = invierteNumero(cifra)
 
     var check = 0
     for (i <- 0 to largoNumero(numeroInvertido) - 1){
-      check = mul(i)(per((i+1)%8)(numeroInvertido(i).toInt))
+      check = mul(check)(per((i+1)%8)(numeroInvertido(i).toInt))
     }
 
-    invierteNumero(check.toString)
+    invierteNumero(check.toString).mkString.toInt
   }
 
-  private def invierteNumero(cifra: String): String = cifra.reverse
+  private def invierteNumero(cifra: String): Array[Int] = cifra.split("").toArray.map(_.toInt).reverse
 
-  private def largoNumero(numeroInvertido: String): Int = numeroInvertido.size
+
+  private def largoNumero(numeroInvertido: Array[Int]): Int = numeroInvertido.size
 
 }
