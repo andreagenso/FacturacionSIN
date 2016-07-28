@@ -8,7 +8,11 @@ class CodigoControl(var numeroAutorizacion: String, var numeroFactura: String, v
                     var fechaTransacion: String, var montoTransaccion: String, var llaveDosificacion:String) {
 
   def generar(): String = {
-    montoTransaccion = montoTransaccion.toDouble.round.toString
+    println(" llave de dosificacion" + llaveDosificacion)
+    println(" 0000 " + montoTransaccion)
+    montoTransaccion = round(montoTransaccion)
+
+
 
       // Paso 1 - obtener y concatenar consecutivamente 2 digitos verhoeff
     numeroFactura = agregarNVerhoeff(numeroFactura,2)
@@ -27,9 +31,10 @@ class CodigoControl(var numeroAutorizacion: String, var numeroFactura: String, v
 
     // Paso 2
     val _5DigitosVerhoeff = sumatoria5Verhoeff.substring(sumatoria5Verhoeff.size-5)
-
+    println(" _5DigitosVerhoeff " + _5DigitosVerhoeff)
     // largo de las cadenas, suma 1 a cada digito verhoeff
-    val suma1Verhoeff = _5DigitosVerhoeff.split("").map(_.toInt +1)
+    val suma1Verhoeff = _5DigitosVerhoeff.split("").map(_.toInt+1)
+    println("suma1Verhoeff " + suma1Verhoeff.foldLeft("")((a,b) => {a + "" + b }))
 
     val substDosificacion1 = llaveDosificacion.substring(0, suma1Verhoeff(0))
     val substDosificacion2 = llaveDosificacion.substring(suma1Verhoeff(0), suma1Verhoeff(0) + suma1Verhoeff(1))
@@ -106,6 +111,14 @@ class CodigoControl(var numeroAutorizacion: String, var numeroFactura: String, v
       res += (new Verhoeff).obtenerVerhoeff(res)
     }
     return res
+  }
+
+  private def round(in: String): String = {
+    var value = in
+    value = value.replace(",", ".")
+    var valueBD: java.math.BigDecimal = new java.math.BigDecimal(value.toDouble)
+    valueBD = valueBD.setScale(0, java.math.BigDecimal.ROUND_HALF_UP)
+    String.valueOf(valueBD)
   }
 
 }
