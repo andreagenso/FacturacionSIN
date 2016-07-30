@@ -15,7 +15,7 @@ class TestVerhoeff extends FlatSpec {
     val verhoeff = (new Verhoeff).obtenerVerhoeff("0")
     val stack = new Stack[Int]
     stack.push(verhoeff)
-    assert(stack.pop() === 1)
+    assert(stack.pop() === 4)
   }
 
   "3. DigitoVerificador = ObtenerVerhoeff(1810)" should "Resultado: DigitoVerificador = 8" in {
