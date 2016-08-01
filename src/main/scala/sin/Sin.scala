@@ -26,6 +26,7 @@ object FacturacionSIN extends App {
   println("OPCIONES:")
   println("\t +Q -> Salir")
   println("\t +N -> Nuevos datos de Factura")
+  println("\t +A -> Correr 5000 casos")
   println("\t +V -> Ver opciones")
 
   while(continuar.equals(InteraccionTeclado.CONTINUARFACTURA) ||  continuar.equals(InteraccionTeclado.CONTINUAROPCION)) {
@@ -33,7 +34,7 @@ object FacturacionSIN extends App {
     var in = ""
 
     if (continuar.equals(InteraccionTeclado.CONTINUAROPCION)){
-      println("INGRESE OPCION (+N +Q +V):")
+      println("INGRESE OPCION (+N +Q +V +A):")
       in = readLine()
     }
     else {
@@ -42,6 +43,8 @@ object FacturacionSIN extends App {
     }
 
     in match {
+      case "+A" =>
+        Casos.test5000Casos()
       case "+Q" =>
         continuar = InteraccionTeclado.SALIR
         println(" ****** --- ADIOS! --- ********* ")
@@ -108,10 +111,16 @@ object FacturacionSIN extends App {
               loop.break()
           }
 
-          val codigoControl = new CodigoControl(numeroAutorizacion,numeroFactura,nitCi,
+          val codigosCifrados = new CodigoControl(numeroAutorizacion,numeroFactura,nitCi,
             fechaTransacion,montoTransaccion,llaveDosificacion).generar()
 
-          println(" CODIGO DE CONTROL GENERADO ES: " + codigoControl)
+          println(" RESULTADOS: " +
+            "\n\tVERHOEFF -> " + codigosCifrados._1 +
+            "\n\tCADENA ->" + codigosCifrados._2 +
+            "\n\tSUMATORIA PRODUCTO: " + codigosCifrados._3 +
+            "\n\tBASE 64: " + codigosCifrados._4 +
+            "\n\tCODIGO CONTROL: " + codigosCifrados._5
+          )
           println(" ****** --- GRACIAS POR SU COMPRA --- ********* ")
 
         }
@@ -129,6 +138,9 @@ object FacturacionSIN extends App {
   private def validarLectura(nombreParametro: String, datoFactura: DatoFactura.Value): (Boolean, String) = {
     val in = readLine()
     in match {
+      case "+A" =>
+        Casos.test5000Casos()
+        (false, in)
       case "+Q" =>
         continuar = InteraccionTeclado.SALIR
         println(" ****** --- ADIOS! --- ********* ")
