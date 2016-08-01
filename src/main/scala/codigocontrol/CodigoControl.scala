@@ -1,5 +1,7 @@
 package codigocontrol
 
+import java.io.{BufferedReader, FileReader}
+
 class CodigoControl(var numeroAutorizacion: String, var numeroFactura: String, var nitCi: String,
                     var fechaTransacion: String, var montoTransaccion: String, var llaveDosificacion:String) {
 
@@ -49,6 +51,7 @@ class CodigoControl(var numeroAutorizacion: String, var numeroFactura: String, v
 
   /**
     * Paso 4 y 5
+    *
     * @param claveAllegerRC4Array
     * @param suma1Verhoeff
     * @return
@@ -134,6 +137,37 @@ class CodigoControl(var numeroAutorizacion: String, var numeroFactura: String, v
     var valueBD: java.math.BigDecimal = new java.math.BigDecimal(value.toDouble)
     valueBD = valueBD.setScale(0, java.math.BigDecimal.ROUND_HALF_UP)
     String.valueOf(valueBD)
+  }
+
+  def test5000Casos(): Unit  = {
+    val codigoControl: CodigoControl = null
+    val file: String = "C:\\IdeaProjects\\FacturacionSIN\\doc\\5000CasosPruebaCCVer7.txt"
+    var cont =0
+
+    try{
+      val br: BufferedReader = new BufferedReader(new FileReader(file))
+      var linea: String = ""
+      linea = br.readLine()
+
+      while (cont < 5000) {
+        cont += 1
+        linea = br.readLine()
+        //reemplaza "|" por "/-/" por no ser compatible con el metodo split
+        val array = linea.replace("|", "/-/").split("/-/").filter(v => v != "/-/")
+
+        val codigoControlGenerado = new CodigoControl(array(0), array(1), array(2), array(3).replace("/", ""),
+          array(4), array(5)).generar()
+        val codigoControlLeido = array(10)
+
+        println(cont + " Codigo de control leido: " + codigoControlLeido +
+          " Codigo de control generado " + codigoControlGenerado + " iguales -> " +
+          (codigoControlGenerado == codigoControlLeido) )
+
+      }
+    } catch {
+      case (e: java.io.IOException) =>
+        println(e.getMessage());
+    }
   }
 
 }
